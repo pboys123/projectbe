@@ -1,0 +1,51 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class Item {
+public:
+    double value;
+    double weight;
+
+    Item(double v, double w) : value(v), weight(w) {}
+};
+
+bool compareItems(const Item& item1, const Item& item2) {
+    return (item1.value / item1.weight) > (item2.value / item2.weight);
+}
+
+double fractionalKnapsack(int W, vector<Item>& items) {
+    sort(items.begin(), items.end(), compareItems);
+
+    double finalValue = 0.0;
+
+    for (const Item& item : items) {
+        if (W >= item.weight) {
+            finalValue += item.value;
+            W -= item.weight;
+        } else {
+            finalValue += (W / item.weight) * item.value;
+            break;
+        }
+    }
+
+    return finalValue;
+}
+
+int main() {
+    int W = 50;  // Maximum weight the knapsack can hold
+    vector<Item> items;
+
+    // Add items with their values and weights
+    items.push_back(Item(30, 10));
+    items.push_back(Item(300, 5));
+    items.push_back(Item(120, 30));
+
+    double maxVal = fractionalKnapsack(W, items);
+
+    cout << "Maximum value that can be obtained: " << maxVal << endl;
+
+    return 0;
+}
